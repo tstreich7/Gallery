@@ -1,14 +1,41 @@
-function upDate(previewPic){
-  console.log("upDate Funktion aufgerufen");
-  console.log("previewPic:", previewPic);
-  console.log("Alt-Text des Bildes:", previewPic.alt);
-  console.log("Quell-URL des Bildes:", previewPic.src);
-
-  document.getElementById("image").innerHTML = previewPic.alt;
-  document.getElementById("image").style.backgroundImage = "url('" + previewPic.src + "')";
+function upDate(previewPic) {
+  console.log("Mouse or focus in:", previewPic.alt);
+  const image = document.getElementById("image");
+  image.style.backgroundImage = `url('${previewPic.src}')`;
+  image.innerText = previewPic.alt;
 }
 
-function unDo(){
-  document.getElementById("image").style.backgroundImage = "url('')";
-  document.getElementById("image").innerHTML = "Hover over an image below to display here.";
+function unDo() {
+  console.log("Mouse or focus out");
+  const image = document.getElementById("image");
+  image.style.backgroundImage = "url('')";
+  image.innerText = "Hover over an image below to display here.";
+}
+
+function init() {
+  console.log("Seite geladen - init läuft");
+
+  // Alle .preview-Bilder finden
+  const images = document.querySelectorAll(".preview");
+
+  for (let i = 0; i < images.length; i++) {
+    // Mausereignisse
+    images[i].addEventListener("mouseover", function () {
+      upDate(this);
+    });
+    images[i].addEventListener("mouseleave", function () {
+      unDo();
+    });
+
+    // Fokus-Ereignisse für Tastatur-Navigation
+    images[i].addEventListener("focus", function () {
+      upDate(this);
+    });
+    images[i].addEventListener("blur", function () {
+      unDo();
+    });
+
+    // tabindex setzen für Tastaturzugriff
+    images[i].setAttribute("tabindex", "0");
+  }
 }
